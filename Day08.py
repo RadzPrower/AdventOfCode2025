@@ -1,9 +1,12 @@
 def main(data):
-    # Create all our 3D points
+    result = ""
+    # Create all our 3D points and circuits
+    circuits = []
     points_list = []
     for i, line in enumerate(data):
         x, y, z = map(int, line.split(','))
         points_list.append(Point(x, y, z))
+        circuits.append({line})
     # Determine distances between each of our 3D points
     pairs_dict = {}
     for point_2 in points_list:
@@ -17,14 +20,20 @@ def main(data):
     pairs_dict = {key: value for key, value in sorted(pairs_dict.items(), key=lambda item: item[1])}
     # Place our junctions into circuits
     count = 0
+    done = False
     if len(data) > 30:
         pair_count = 1000
     else:
         pair_count = 10
-    circuits = []
     for pair in pairs_dict:
         count += 1
-        if count > pair_count: break
+        # Once we've hit our expected connections count we will find the product
+        if count > pair_count and not done:
+            product = 1
+            for i in range(3):
+                product *= len(circuits[i])
+                done = True
+            result = "The three largest circuits' product is " + str(product) + ".\n"
         if not circuits:
             circuits.append({pair[0], pair[1]})
             continue
@@ -36,17 +45,13 @@ def main(data):
                 found = True
         if not found:
             circuits.append({pair[0], pair[1]})
-    # Further consolidate circuits
-    consolidated_circuits = consolidate_circuits(circuits)
-    # Determine value of the three largest circuits
-    result = 1
-    consolidated_circuits.sort(key=len, reverse=True)
-    for i in range(3):
-        result *= len(consolidated_circuits[i])
-    for circuit_1 in consolidated_circuits:
-        for circuit_2 in consolidated_circuits:
-            print(str(len(circuit_1.intersection(circuit_2))) + "\n")
-    return "The circuits' value is " + str(result) + ".\n"
+        circuits = consolidate_circuits(circuits)
+        if len(circuits) == 1: break
+    junction_1 = int(pair[0].split(',')[0])
+    junction_2 = int(pair[1].split(',')[0])
+    final_connection_product = junction_1 * junction_2
+    result += "The product of the final connection is " + str(final_connection_product) + ".\n"
+    return result
 
 
 def consolidate_circuits(circuits):
@@ -71,6 +76,7 @@ def consolidate_circuits(circuits):
     if overlap:
         return consolidate_circuits(consolidated_circuits)
     else:
+        consolidated_circuits.sort(key=len, reverse=True)
         return consolidated_circuits
 
 
