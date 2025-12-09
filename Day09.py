@@ -1,20 +1,37 @@
+import shapely
+from shapely import polygons,box
+
 def main(data):
     # Generate list of points
     points = []
+    polygon_points = []
     for line in data:
         x, y = map(int, line.split(','))
         points.append(Point(x, y))
+        polygon_points.append([x, y])
+    # Use polygon_points to create a shapely polygon
+    green_tiles = polygons(polygon_points)
     # Create all possible Point pairs
     pairs = []
+    green_pairs = []
     for point_1 in points:
         for point_2 in points:
             if point_1 != point_2:
                 pairs.append(frozenset([point_1, point_2]))
+                square = box(point_1.x, point_1.y, point_2.x, point_2.y)
+                if green_tiles.contains(square):
+                    green_pairs.append(frozenset([point_1, point_2]))
     # Find largest rectangle
     rect_sizes = {}
+    green_rect_sizes = {}
     for pair in pairs:
         rect_sizes[pair]=rectangle_size(pair)
-    return f"The largest rectangle possible is {max(rect_sizes.values())} tiles."
+        if pair in green_pairs:
+            green_rect_sizes[pair]=rectangle_size(pair)
+    result = f"The largest rectangle possible is {max(rect_sizes.values())} tiles.\n"
+    result += (f"The largest rectangle possible with only green and red tiles is "
+               f"{max(green_rect_sizes.values())} tiles.\n")
+    return result
 
 
 def rectangle_size(pair):
