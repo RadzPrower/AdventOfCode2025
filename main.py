@@ -14,19 +14,6 @@ import Day09
 import Day10
 import Day11
 import Day12
-import Day13
-import Day14
-import Day15
-import Day16
-import Day17
-import Day18
-import Day19
-import Day20
-import Day21
-import Day22
-import Day23
-import Day24
-import Day25
 
 
 def button_click(number):
@@ -61,32 +48,6 @@ def button_click(number):
             result = Day11.main(data)
         case 12:
             result = Day12.main(data)
-        case 13:
-            result = Day13.main(data)
-        case 14:
-            result = Day14.main(data)
-        case 15:
-            result = Day15.main(data)
-        case 16:
-            result = Day16.main(data)
-        case 17:
-            result = Day17.main(data)
-        case 18:
-            result = Day18.main(data)
-        case 19:
-            result = Day19.main(data)
-        case 20:
-            result = Day20.main(data)
-        case 21:
-            result = Day21.main(data)
-        case 22:
-            result = Day22.main(data)
-        case 23:
-            result = Day23.main(data)
-        case 24:
-            result = Day24.main(data)
-        case 25:
-            result = Day25.main(data)
         case _:
             print("Day " + str(number) + " is not yet implemented!")
     execution_time = time.time() - start
@@ -101,7 +62,7 @@ def button_click(number):
 def create_buttons(frame, start, end):
     for i in range(start, end + 1):
         button = tk.Button(frame, text=str(i), width=5, height=2, command=lambda i=i: button_click(i))
-        button.grid(row=(i - start) // 5, column=(i - start) % 5, padx=5, pady=5)
+        button.grid(row=(i - start) // 6, column=(i - start) % 6, padx=5, pady=5)
 
 
 def create_checkbox(frame):
@@ -141,7 +102,7 @@ root.title("Archipelago 2025")
 button_frame = tk.Frame(root)
 
 # Create buttons from 1 to 25
-create_buttons(button_frame, 1, 25)
+create_buttons(button_frame, 1, 12)
 
 # Pack the frame containing buttons
 button_frame.pack(padx=10, pady=10)
