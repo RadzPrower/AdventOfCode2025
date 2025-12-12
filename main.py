@@ -96,12 +96,12 @@ def get_day_data(day):
 # Create the main window
 hide_console()
 root = tk.Tk()
-root.title("Archipelago 2025")
+root.title("Advent of Code 2025")
 
 # Create a frame for the buttons
 button_frame = tk.Frame(root)
 
-# Create buttons from 1 to 25
+# Create buttons from 1 to 12
 create_buttons(button_frame, 1, 12)
 
 # Pack the frame containing buttons
